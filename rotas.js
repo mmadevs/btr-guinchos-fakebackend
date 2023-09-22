@@ -41,7 +41,7 @@ router.post('/login', (req, res) => {
     const accessToken = jwt.sign({id, cpf}, 'ACCESS_TOKEN_SECRET', {expiresIn: '10d'})
       
     res.cookie('accessToken', accessToken, JSON.stringify({
-      maxAge: 1000 * 60 * 60 * 24 * 10, sameSite: 'strict',
+      maxAge: 1000 * 60 * 60 * 24 * 10, sameSite: 'none',
       httpOnly: true, secure: process.env.NODE_ENV === 'production'
     }))
     

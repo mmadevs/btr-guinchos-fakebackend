@@ -40,10 +40,10 @@ router.post('/login', (req, res) => {
    
     const accessToken = jwt.sign({id, cpf}, 'ACCESS_TOKEN_SECRET', {expiresIn: '10d'})
       
-    res.cookie('accessToken', accessToken, JSON.stringify({
+    res.cookie('accessToken', accessToken, {
       maxAge: 1000 * 60 * 60 * 24 * 10, sameSite: 'none', 
       httpOnly: false, secure: process.env.NODE_ENV === 'production'
-    }))
+    })
     
     res.send({ user })
     

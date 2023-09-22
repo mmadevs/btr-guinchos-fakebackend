@@ -42,7 +42,7 @@ router.post('/login', (req, res) => {
       
     res.cookie('accessToken', accessToken, JSON.stringify({
       maxAge: 1000 * 60 * 60 * 24 * 10, sameSite: 'none',
-      httpOnly: true, secure: process.env.NODE_ENV === 'production'
+      httpOnly: true, secure: false //process.env.NODE_ENV === 'production'
     }))
     
     res.send({ user })

@@ -4,7 +4,7 @@ const router = express.Router()
 const static = express.static
 // const {v4: uuidv4} = require('uuid')
 const jwt = require('jsonwebtoken')
-const { users, contracts, viagens, statuses } = require('./src/data/data')
+const { users, contracts, viagens, statuses, individuos, empresas } = require('./src/data/data')
 
 router.use('/static', static(path.join(path.resolve(), 'src', 'images')))
 
@@ -39,10 +39,13 @@ router.post('/login', (req, res) => {
     const user = {id, name, email, imageUrl, notifications }
    
     const accessToken = jwt.sign({id, cpf}, 'ACCESS_TOKEN_SECRET', {expiresIn: '10d'})
-      
+    
+    const isProduction = process.env.NODE_ENV === 'production'  
+    
     res.cookie('accessToken', accessToken, {
-      maxAge: 1000 * 60 * 60 * 24 * 10, sameSite: 'none', 
-      httpOnly: false, secure: process.env.NODE_ENV === 'production'
+      maxAge: 1000 * 60 * 60 * 24 * 10, httpOnly: false, 
+      sameSite: isProduction ? 'none' : 'strict', 
+      secure: isProduction
     })
     
     res.send({ user })
@@ -115,6 +118,10 @@ router.get('/app/dashboard/trips', (req, res) => {
 })
 router.get('/app/dashboard/statuses', (req, res) => {  
   return res.send({ statuses })
+})
+router.get('/app/clients', (req, res) => {  
+  const clients = [...individuos, ...empresas]
+  return res.send({ clients })
 })
 
 router.get('/app/notifications', (req, res) => {
